@@ -1,0 +1,33 @@
+services:
+  postgres:
+    image: postgres:15
+    container_name: sgsu-postgres
+    environment:
+      POSTGRES_DB: sgsu_db
+      POSTGRES_USER: sgsu_user
+      POSTGRES_PASSWORD: sgsu_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:23.0.0
+    container_name: sgsu-keycloak
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://postgres:5432/sgsu_db
+      KC_DB_USERNAME: sgsu_user
+      KC_DB_PASSWORD: sgsu_password
+      KC_BOOTSTRAP_ADMIN_USERNAME: admin
+      KC_BOOTSTRAP_ADMIN_PASSWORD: admin
+    command: start-dev
+    ports:
+      - "8080:8080"
+    depends_on:
+      - postgres
+    restart: unless-stopped
+
+volumes:
+  postgres_data:

@@ -1,0 +1,188 @@
+{
+  "etudiants": [
+    {
+      "id": 1778707083802,
+      "matricule": "E0002",
+      "nom": "Natoum",
+      "prenom": "Pierre",
+      "email": "natoumpierre9@gmail.com",
+      "filiere": "Médecine",
+      "niveau": 3,
+      "actif": 1,
+      "sexe": "Masculin",
+      "type": "Ancien",
+      "telephone": "65696449",
+      "adresse": "Amtoukoui"
+    },
+    {
+      "id": 1778707540755,
+      "matricule": "E00TR1",
+      "nom": "Le Sympa",
+      "prenom": " Fils",
+      "email": "natoumpierre9@gmail.com",
+      "filiere": "Informatique",
+      "niveau": 2,
+      "actif": 1
+    }
+  ],
+  "cours": [
+    {
+      "id": 1,
+      "code": "INFO1",
+      "titre": "Introduction à l'Algorithmique",
+      "credits": "2.5",
+      "semestre": "S1",
+      "filiere": "Informatique",
+      "niveau": 1
+    },
+    {
+      "id": 1778700043986,
+      "code": "INFO2",
+      "titre": "Administration systeme",
+      "credits": "3",
+      "semestre": "S4",
+      "filiere": "Informatique",
+      "niveau": 2
+    },
+    {
+      "id": 1778707268673,
+      "code": "MD1",
+      "titre": "Anatomie",
+      "credits": 6,
+      "semestre": "S2",
+      "filiere": "Médecine",
+      "niveau": 2
+    },
+    {
+      "id": 1778716381721,
+      "code": "INFO1",
+      "titre": "Analyse1",
+      "credits": "2.5",
+      "semestre": "S1",
+      "filiere": "Informatique",
+      "niveau": 1
+    }
+  ],
+  "inscriptions": [
+    {
+      "id": 1778707105786,
+      "etudiantId": 1778707083802,
+      "coursId": 1,
+      "date": "2026-05-13",
+      "statut": "Validée"
+    },
+    {
+      "id": 1778707911556.5059,
+      "etudiantId": 1778707540755,
+      "coursId": 1,
+      "date": "2026-05-13",
+      "statut": "Validée"
+    },
+    {
+      "id": 1778707911556.2922,
+      "etudiantId": 1778707540755,
+      "coursId": 1778700043986,
+      "date": "2026-05-13",
+      "statut": "Validée"
+    },
+    {
+      "id": 1778707911556.258,
+      "etudiantId": 1778707540755,
+      "coursId": 1778707268673,
+      "date": "2026-05-13",
+      "statut": "Validée"
+    }
+  ],
+  "notes": [
+    {
+      "id": 1778707202479,
+      "inscriptionId": 1778698706431,
+      "type": "CC",
+      "note": 12,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778707202532,
+      "inscriptionId": 1778698706431,
+      "type": "ET1",
+      "note": 13,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778707202535,
+      "inscriptionId": 1778707105786,
+      "type": "CC",
+      "note": 15,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778707202537,
+      "inscriptionId": 1778707105786,
+      "type": "ET1",
+      "note": 8,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778709738821,
+      "inscriptionId": 1778707911556.5059,
+      "type": "CC",
+      "note": 12,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778709738907,
+      "inscriptionId": 1778707911556.5059,
+      "type": "ET1",
+      "note": 13,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778709794643,
+      "inscriptionId": 1778707911556.2922,
+      "type": "CC",
+      "note": 10,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778709794646,
+      "inscriptionId": 1778707911556.2922,
+      "type": "ET1",
+      "note": 8,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778709824131,
+      "inscriptionId": 1778707911556.258,
+      "type": "ET1",
+      "note": 18,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    },
+    {
+      "id": 1778709824136,
+      "inscriptionId": 1778707911556.258,
+      "type": "CC",
+      "note": 19,
+      "coefficient": 1,
+      "session": "Normale",
+      "date": "13/05/2026"
+    }
+  ]
+}
