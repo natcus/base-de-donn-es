@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: sgsu
+    runtime: node
+    rootDir: SGSU/sgsu-backend-node
+    buildCommand: npm install && npx prisma generate
+    startCommand: node server.js
+    plan: free
+    envVars:
+      - key: DATABASE_URL
+        value: postgresql://neondb_owner:npg_UHqh1DVeFc9u@ep-falling-smoke-apfo7pqb.c-7.us-east-1.aws.neon.tech/neondb?sslmode=require
