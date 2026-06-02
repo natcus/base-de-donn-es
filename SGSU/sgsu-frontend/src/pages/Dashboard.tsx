@@ -126,7 +126,7 @@ const Dashboard: React.FC = () => {
         <Grid item xs={12} md={8}>
           <Paper sx={{ p: 4, borderRadius: 6, border: '1px solid #f1f5f9' }}>
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 4 }}>Effectifs par Filière</Typography>
-            {/* <Box sx={{ height: 350, width: '100%' }}>
+            <Box sx={{ height: 350, width: '100%' }}>
                 <ResponsiveContainer>
                     <BarChart data={filiereData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#f1f5f9" />
@@ -137,15 +137,12 @@ const Dashboard: React.FC = () => {
                             contentStyle={{borderRadius: '12px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}}
                         />
                         <Bar dataKey="value" radius={[6, 6, 0, 0]} barSize={40}>
-                            {filiereData.map((entry, index) => (
+                            {filiereData.map((_entry, index) => (
                                 <Cell key={`cell-${index}`} fill={index % 2 === 0 ? '#6366f1' : '#818cf8'} />
                             ))}
                         </Bar>
                     </BarChart>
                 </ResponsiveContainer>
-            </Box> */}
-            <Box sx={{ height: 350, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#f8fafc', borderRadius: 4 }}>
-                <Typography color="text.disabled">Graphique temporairement désactivé pour diagnostic</Typography>
             </Box>
           </Paper>
         </Grid>
@@ -154,7 +151,7 @@ const Dashboard: React.FC = () => {
         <Grid item xs={12} md={4}>
           <Paper sx={{ p: 4, borderRadius: 6, border: '1px solid #f1f5f9', height: '100%' }}>
             <Typography variant="h6" sx={{ fontWeight: 800, mb: 4 }}>Bilan Académique</Typography>
-            {/* <Box sx={{ height: 300, width: '100%' }}>
+            <Box sx={{ height: 300, width: '100%' }}>
                 <ResponsiveContainer>
                     <PieChart>
                         <Pie
@@ -172,9 +169,6 @@ const Dashboard: React.FC = () => {
                         <Legend verticalAlign="bottom" height={36}/>
                     </PieChart>
                 </ResponsiveContainer>
-            </Box> */}
-            <Box sx={{ height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', bgcolor: '#f8fafc', borderRadius: 4 }}>
-                <Typography color="text.disabled">Cercle désactivé</Typography>
             </Box>
             <Box sx={{ mt: 2, textAlign: 'center' }}>
                 <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 600 }}>Taux global basé sur les notes saisies.</Typography>

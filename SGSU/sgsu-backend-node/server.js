@@ -22,7 +22,8 @@ if (!fs.existsSync(DB_FILE)) {
             { id: 1, code: 'INF101', titre: 'Introduction à l\'Algorithmique', credits: 6, semestre: 'S1', filiere: 'Informatique' }
         ],
         inscriptions: [],
-        notes: []
+        notes: [],
+        paiements: []
     };
     fs.writeFileSync(DB_FILE, JSON.stringify(initialData, null, 2));
 }
@@ -252,6 +253,51 @@ app.delete('/api/notes/:id', (req, res) => {
     db.notes = db.notes.filter(n => n.id !== id);
     writeDB(db);
     res.json({ message: "Note supprimée." });
+});
+
+// --- MODULE FINANCES (PAIEMENTS) ---
+
+// Lister les paiements
+app.get('/api/paiements', (req, res) => {
+    const db = readDB();
+    if (!db.paiements) db.paiements = [];
+    res.json(db.paiements);
+});
+
+// Ajouter un paiement
+app.post('/api/paiements', (req, res) => {
+    const db = readDB();
+    if (!db.paiements) db.paiements = [];
+    
+    const { etudiant, montant, trxId, methode } = req.body;
+    
+    const newPaiement = {
+        id: Date.now(),
+        etudiantId: etudiant.id,
+        montant: parseFloat(montant),
+        trxId: trxId || 'TRX-' + Date.now(),
+        methode: methode || 'Espèces',
+        datePaiement: new Date().toISOString()
+    };
+    
+    db.paiements.push(newPaiement);
+    writeDB(db);
+    
+    // On retourne le paiement avec l'objet etudiant tel qu'attendu par le front
+    res.json({
+        ...newPaiement,
+        etudiant: { id: etudiant.id }
+    });
+});
+
+// Supprimer un paiement
+app.delete('/api/paiements/:id', (req, res) => {
+    const db = readDB();
+    if (!db.paiements) db.paiements = [];
+    const id = Number(req.params.id);
+    db.paiements = db.paiements.filter(p => p.id !== id);
+    writeDB(db);
+    res.json({ message: "Paiement supprimé." });
 });
 
 // Start server

@@ -35,8 +35,23 @@ SGSU se distingue par son interface **Premium & Glassmorphic**, offrant une exp�
 
 ## 🛠 Stack Technique
 - **Frontend :** React 18, Vite, Material UI (MUI) v5.
-- **Backend :** Node.js / Express (Port 8081) pour le prototype.
-- **Architecture :** Modulaire, Typage TypeScript strict pour une maintenance facile.
+- **Backend (Cœur du Projet) :** Node.js / Express (Port 8081). C'est le moteur de l'application gérant toute la logique métier.
+- **Base de Données (Prototype) :** Fichier JSON (`database.json`) avec gestion transactionnelle locale. L'architecture backend est pensée autour de la structuration, de l'intégrité et de l'interrogation de ces données.
+- **Architecture :** Modulaire, orientée données. Typage TypeScript strict côté frontend pour une interaction sécurisée avec l'API.
+
+---
+
+## 🗄️ Architecture de la Base de Données
+
+Le but premier de ce projet est la gestion avancée des données (BDDA). Actuellement, le backend repose sur une architecture de données structurée autour des entités suivantes :
+
+- **`etudiants`** : Données civiles et académiques.
+- **`cours`** : Catalogue des Unités d'Enseignement (UE).
+- **`inscriptions`** : Table de liaison gérant les inscriptions des étudiants aux cours.
+- **`notes`** : Historique des évaluations (CC, Examens) avec prise en charge des coefficients et sessions.
+- **`paiements`** : Suivi des transactions financières pour la gestion de la scolarité.
+
+Cette structuration permet des requêtes complexes (comme le calcul dynamique du GPA, le taux de recouvrement financier, etc.) simulant le comportement d'un véritable SGBD relationnel.
 
 ---
 

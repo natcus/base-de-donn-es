@@ -23,7 +23,8 @@ const Finance: React.FC = () => {
   const [lastPayment, setLastPayment] = useState<any>(null);
   const [payAmount, setPayAmount] = useState<number>(0);
   
-  const TUITION_FEE = parseInt(localStorage.getItem('tuitionFee') || '500000');
+  const rawFee = localStorage.getItem('tuitionFee') || '500000';
+  const TUITION_FEE = Number(String(rawFee).replace(/[^0-9.-]/g, '')) || 500000;
 
   const loadData = async () => {
     setLoading(true);
@@ -45,8 +46,15 @@ const Finance: React.FC = () => {
 
   const getStudentBalance = (studentId: any) => {
     const studentPays = paiements.filter(p => String(p.etudiant?.id || p.etudiantId) === String(studentId));
-    const paid = studentPays.reduce((acc, p) => acc + parseFloat(p.montant || 0), 0);
-    return { paid, remaining: TUITION_FEE - paid };
+    const paidRaw = studentPays.reduce((acc, p) => {
+      const m = p?.montant;
+      const num = Number(String(m).replace(/[^0-9.-]/g, '')) || 0;
+      return acc + num;
+    }, 0);
+    const paid = Math.round(paidRaw);
+    const remainingRaw = Math.round(TUITION_FEE - paid); // can be negative when overpaid
+    const remaining = remainingRaw > 0 ? remainingRaw : 0; // never show negative as remaining
+    return { paid, remaining, remainingRaw };
   };
 
   const handlePayment = async (montant: number) => {
@@ -172,8 +180,11 @@ const Finance: React.FC = () => {
             </TableHead>
             <TableBody>
               {filteredStudents.map((s) => {
-                const { paid, remaining } = getStudentBalance(s.id);
-                const status = remaining <= 0 ? 'Soldé' : paid > 0 ? 'Partiel' : 'Impayé';
+                const { paid, remaining, remainingRaw } = getStudentBalance(s.id);
+                let status = 'Impayé';
+                if (remainingRaw < 0) status = 'Crédit';
+                else if (remainingRaw === 0) status = 'Soldé';
+                else if (paid > 0) status = 'Partiel';
                 return (
                   <TableRow key={s.id} hover>
                     <TableCell>
@@ -187,8 +198,8 @@ const Finance: React.FC = () => {
                     </TableCell>
                     <TableCell sx={{ fontWeight: 700 }}>{TUITION_FEE.toLocaleString()} FCFA</TableCell>
                     <TableCell sx={{ fontWeight: 700, color: 'success.main' }}>{paid.toLocaleString()} FCFA</TableCell>
-                    <TableCell sx={{ fontWeight: 700, color: remaining > 0 ? 'error.main' : remaining < 0 ? 'success.main' : 'text.primary' }}>
-                      {remaining.toLocaleString()} FCFA
+                    <TableCell sx={{ fontWeight: 700, color: remainingRaw > 0 ? 'error.main' : remainingRaw < 0 ? 'success.main' : 'text.primary' }}>
+                      {remaining.toLocaleString()} FCFA{remainingRaw < 0 ? ` (Crédit: ${(-remainingRaw).toLocaleString()} FCFA)` : ''}
                     </TableCell>
                     <TableCell>
                       <Chip 
@@ -219,13 +230,13 @@ const Finance: React.FC = () => {
                                 variant="contained" 
                                 onClick={() => { 
                                     setSelectedStudent(s); 
-                                    const { remaining } = getStudentBalance(s.id);
-                                    setPayAmount(remaining > 0 ? remaining : 0);
+                                const bal = getStudentBalance(s.id);
+                                setPayAmount(bal.remaining > 0 ? bal.remaining : 0);
                                     setOpenPay(true); 
                                 }}
                                 sx={{ borderRadius: 1.5, opacity: 1 }}
                             >
-                                {remaining <= 0 ? "Ajuster" : "Encaisser"}
+                              {remainingRaw <= 0 ? "Ajuster" : "Encaisser"}
                             </Button>
                         </Box>
                     </TableCell>

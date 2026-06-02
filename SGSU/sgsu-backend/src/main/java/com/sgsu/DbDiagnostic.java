@@ -4,9 +4,9 @@ import java.sql.*;
 
 public class DbDiagnostic {
     public static void main(String[] args) {
-        String url = "jdbc:postgresql://localhost:5432/postgres";
-        String user = "postgres";
-        String password = "lesympafils";
+        String url = System.getenv().getOrDefault("SPRING_DATASOURCE_URL", "jdbc:postgresql://localhost:5432/postgres");
+        String user = System.getenv().getOrDefault("SPRING_DATASOURCE_USERNAME", "postgres");
+        String password = System.getenv().getOrDefault("SPRING_DATASOURCE_PASSWORD", "lesympafils");
 
         try (Connection conn = DriverManager.getConnection(url, user, password)) {
             System.out.println("--- DIAGNOSTIC BASE DE DONNÉES : TABLE COURS ---");
