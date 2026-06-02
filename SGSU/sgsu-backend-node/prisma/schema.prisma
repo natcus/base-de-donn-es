@@ -1,0 +1,67 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Etudiant {
+  id           Int           @id @default(autoincrement())
+  matricule    String        @unique
+  nom          String
+  prenom       String
+  email        String        @unique
+  sexe         String?
+  filiere      String?
+  niveau       Int?
+  telephone    String?
+  adresse      String?
+  type         String?
+  actif        Int           @default(1)
+  inscriptions Inscription[]
+  paiements    Paiement[]
+}
+
+model Cours {
+  id           Int           @id @default(autoincrement())
+  code         String        @unique
+  titre        String
+  credits      Int
+  semestre     String?
+  filiere      String?
+  inscriptions Inscription[]
+}
+
+model Inscription {
+  id         Int      @id @default(autoincrement())
+  etudiantId Int
+  coursId    Int
+  date       String
+  statut     String
+  etudiant   Etudiant @relation(fields: [etudiantId], references: [id], onDelete: Cascade)
+  cours      Cours    @relation(fields: [coursId], references: [id], onDelete: Cascade)
+  notes      Note[]
+}
+
+model Note {
+  id            Int         @id @default(autoincrement())
+  inscriptionId Int
+  type          String      // CC, ET1, ET2
+  note          Float
+  coefficient   Float
+  session       String
+  date          String
+  inscription   Inscription @relation(fields: [inscriptionId], references: [id], onDelete: Cascade)
+}
+
+model Paiement {
+  id           Int      @id @default(autoincrement())
+  etudiantId   Int
+  montant      Float
+  trxId        String   @unique
+  methode      String
+  datePaiement String
+  etudiant     Etudiant @relation(fields: [etudiantId], references: [id], onDelete: Cascade)
+}
