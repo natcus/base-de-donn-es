@@ -1,27 +1,60 @@
 import React, { useState } from 'react';
 import {
-  Box, Paper, Typography, TextField, Button, InputAdornment, IconButton, Alert, Container
+  Box, Paper, Typography, TextField, Button, InputAdornment, IconButton, Alert, Container,
+  MenuItem, Select, FormControl, InputLabel
 } from '@mui/material';
 import {
   Email as EmailIcon, Lock as LockIcon, Visibility, VisibilityOff,
-  School as SchoolIcon, ArrowForward as ArrowIcon
+  School as SchoolIcon, ArrowForward as ArrowIcon, Person as PersonIcon
 } from '@mui/icons-material';
+import { api } from '../services/api';
+
 
 const Login: React.FC = () => {
   const [showPassword, setShowPassword] = useState(false);
-  const [formData, setFormData] = useState({ email: '', password: '' });
+  const [isSignUp, setIsSignUp] = useState(false);
+  const [formData, setFormData] = useState({ email: '', password: '', nom: '', role: 'etudiant' });
   const [error, setError] = useState('');
+  const [success, setSuccess] = useState('');
 
-  const handleLogin = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (formData.email === 'admin@sgsu.edu' && formData.password === 'admin123') {
-      localStorage.setItem('user', JSON.stringify({ role: 'admin', name: 'Admin' }));
-      window.location.href = '/';
-    } else if (formData.email === 'pro@sgsu.edu' && formData.password === 'pro123') {
-      localStorage.setItem('user', JSON.stringify({ role: 'prof', name: 'Professeur' }));
-      window.location.href = '/grades';
-    } else {
-      setError('Identifiants invalides. Utilisez admin@sgsu.edu / admin123');
+    setError('');
+    setSuccess('');
+
+    try {
+      if (isSignUp) {
+        if (!formData.nom || !formData.email || !formData.password) {
+          setError('Veuillez remplir tous les champs.');
+          return;
+        }
+        await api.post('/auth/register', {
+          nom: formData.nom,
+          email: formData.email,
+          password: formData.password,
+          role: formData.role
+        });
+        setSuccess('Compte créé avec succès ! Vous pouvez maintenant vous connecter.');
+        setIsSignUp(false);
+        setFormData({ ...formData, password: '' }); // clear password
+      } else {
+        if (!formData.email || !formData.password) {
+          setError('Veuillez remplir tous les champs.');
+          return;
+        }
+        const res = await api.post('/auth/login', {
+          email: formData.email,
+          password: formData.password
+        });
+        localStorage.setItem('user', JSON.stringify({ role: res.role, name: res.nom }));
+        if (res.role === 'prof') {
+          window.location.href = '/grades';
+        } else {
+          window.location.href = '/';
+        }
+      }
+    } catch (err: any) {
+      setError(err.message || 'Une erreur est survenue.');
     }
   };
 
@@ -66,14 +99,32 @@ const Login: React.FC = () => {
             <SchoolIcon sx={{ color: 'white', fontSize: 35 }} />
           </Box>
 
-          <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: '#1e293b' }}>Bienvenue</Typography>
+          <Typography variant="h4" sx={{ fontWeight: 900, mb: 1, color: '#1e293b' }}>
+            {isSignUp ? 'Créer un compte' : 'Bienvenue'}
+          </Typography>
           <Typography variant="body2" color="text.secondary" sx={{ mb: 4, fontWeight: 500 }}>
-            Connectez-vous pour accéder à ENASTIC.
+            {isSignUp ? 'Inscrivez-vous pour rejoindre ENASTIC.' : 'Connectez-vous pour accéder à ENASTIC.'}
           </Typography>
 
           {error && <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }}>{error}</Alert>}
+          {success && <Alert severity="success" sx={{ mb: 3, borderRadius: 2 }}>{success}</Alert>}
 
-          <form onSubmit={handleLogin}>
+          <form onSubmit={handleSubmit}>
+            {isSignUp && (
+              <TextField
+                fullWidth
+                label="Nom complet"
+                variant="outlined"
+                margin="normal"
+                value={formData.nom}
+                onChange={(e) => setFormData({ ...formData, nom: e.target.value })}
+                InputProps={{
+                  startAdornment: <InputAdornment position="start"><PersonIcon sx={{ color: 'text.secondary' }} /></InputAdornment>,
+                  sx: { borderRadius: 3 }
+                }}
+              />
+            )}
+
             <TextField
               fullWidth
               label="Adresse Email"
@@ -86,6 +137,7 @@ const Login: React.FC = () => {
                 sx: { borderRadius: 3 }
               }}
             />
+            
             <TextField
               fullWidth
               label="Mot de passe"
@@ -107,6 +159,23 @@ const Login: React.FC = () => {
               }}
             />
 
+            {isSignUp && (
+              <FormControl fullWidth margin="normal" variant="outlined">
+                <InputLabel id="role-label">Rôle</InputLabel>
+                <Select
+                  labelId="role-label"
+                  label="Rôle"
+                  value={formData.role}
+                  onChange={(e) => setFormData({ ...formData, role: e.target.value })}
+                  sx={{ borderRadius: 3, textAlign: 'left' }}
+                >
+                  <MenuItem value="etudiant">Étudiant</MenuItem>
+                  <MenuItem value="prof">Enseignant</MenuItem>
+                  <MenuItem value="admin">Administrateur</MenuItem>
+                </Select>
+              </FormControl>
+            )}
+
             <Button
               fullWidth
               type="submit"
@@ -123,13 +192,26 @@ const Login: React.FC = () => {
                 boxShadow: '0 10px 20px rgba(99, 102, 241, 0.2)'
               }}
             >
-              Se Connecter
+              {isSignUp ? "S'inscrire" : 'Se Connecter'}
             </Button>
           </form>
 
           <Box sx={{ mt: 4 }}>
-            <Typography variant="caption" color="text.secondary">
-              Mot de passe oublié ? <span style={{ color: '#6366f1', fontWeight: 700, cursor: 'pointer' }}>Contactez l'administrateur</span>
+            <Typography 
+              variant="body2" 
+              sx={{ 
+                color: '#6366f1', 
+                fontWeight: 700, 
+                cursor: 'pointer',
+                '&:hover': { textDecoration: 'underline' } 
+              }}
+              onClick={() => {
+                setIsSignUp(!isSignUp);
+                setError('');
+                setSuccess('');
+              }}
+            >
+              {isSignUp ? "Déjà un compte ? Se connecter" : "Pas encore de compte ? Créer un compte"}
             </Typography>
           </Box>
         </Paper>
@@ -143,3 +225,5 @@ const Login: React.FC = () => {
 };
 
 export default Login;
+
+

@@ -65,3 +65,13 @@ model Paiement {
   datePaiement String
   etudiant     Etudiant @relation(fields: [etudiantId], references: [id], onDelete: Cascade)
 }
+
+model User {
+  id       Int    @id @default(autoincrement())
+  nom      String
+  email    String @unique
+  password String
+  role     String // admin, prof, etudiant
+}
+
+

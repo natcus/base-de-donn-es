@@ -18,6 +18,37 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // --- API Routes ---
 
+// --- Authentification ---
+app.post('/api/auth/register', async (req, res) => {
+    try {
+        const { nom, email, password, role } = req.body;
+        const exists = await prisma.user.findUnique({ where: { email } });
+        if (exists) {
+            return res.status(400).json({ message: "Cet email est déjà utilisé." });
+        }
+        const newUser = await prisma.user.create({
+            data: { nom, email, password, role: role || 'etudiant' }
+        });
+        res.json({ message: "Compte créé avec succès.", user: { nom: newUser.nom, email: newUser.email, role: newUser.role } });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+app.post('/api/auth/login', async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        const user = await prisma.user.findUnique({ where: { email } });
+        if (!user || user.password !== password) {
+            return res.status(400).json({ message: "Identifiants invalides." });
+        }
+        res.json({ nom: user.nom, email: user.email, role: user.role });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
+});
+
+
 // Lister les étudiants
 app.get('/api/etudiants', async (req, res) => {
     try {
