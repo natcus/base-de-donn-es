@@ -4,6 +4,19 @@
 
 ---
 
+## 🚀 Version en Production
+L'application est officiellement hébergée et accessible en ligne :
+* **Lien de l'application :** [https://sgsu.onrender.com](https://sgsu.onrender.com)
+* **Base de Données :** PostgreSQL (Serverless sur **Neon**)
+
+### 🔑 Identifiants d'administration par défaut (Se Connecter) :
+* **Adresse Email :** `admin@sgsu.edu`
+* **Mot de passe :** `admin@123`
+* *(Vous pouvez également créer de nouveaux comptes personnalisés via l'option "Créer un compte")*
+
+---
+
+
 ## 💎 Vision & Design
 SGSU se distingue par son interface **Premium & Glassmorphic**, offrant une expérience utilisateur fluide et intuitive. L'application n'est pas seulement un outil de saisie, c'est un centre de décision académique.
 
@@ -36,7 +49,7 @@ SGSU se distingue par son interface **Premium & Glassmorphic**, offrant une exp�
 ## 🛠 Stack Technique
 - **Frontend :** React 18, Vite, Material UI (MUI) v5.
 - **Backend (Cœur du Projet) :** Node.js / Express (Port 8081). C'est le moteur de l'application gérant toute la logique métier.
-- **Base de Données (Prototype) :** Fichier JSON (`database.json`) avec gestion transactionnelle locale. L'architecture backend est pensée autour de la structuration, de l'intégrité et de l'interrogation de ces données.
+- **Base de Données (Production) :** PostgreSQL (hébergé sur **Neon**) avec **Prisma ORM**. C'est le moteur de persistance relationnel assurant l'intégrité et la rapidité des transactions académiques.
 - **Architecture :** Modulaire, orientée données. Typage TypeScript strict côté frontend pour une interaction sécurisée avec l'API.
 
 ---
