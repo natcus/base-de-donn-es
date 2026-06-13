@@ -1,0 +1,135 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+\usepackage{graphicx}
+\usepackage{hyperref}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+
+\title[Projet SGSU]{Système de Gestion de la Scolarité Universitaire (SGSU)}
+\subtitle{Présentation de Projet TP - Base de Données Avancée (BDDA)}
+\author{NATOUM PIERRE}
+\institute[BDDA]{Enseignant : BRAHIM ISSA HASSABALLAH}
+\date{Année académique 2025-2026}
+
+\begin{document}
+
+\begin{frame}
+    \titlepage
+\end{frame}
+
+\begin{frame}{Contexte et Objectifs}
+    \textbf{Le problème actuel :} 
+    \begin{itemize}
+        \item Dans le système LMD, la gestion des dossiers étudiants, le calcul des moyennes et le suivi des paiements sont souvent chronophages.
+        \item Sujet aux erreurs humaines sans système centralisé.
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textbf{Notre solution (SGSU) :}
+    \begin{itemize}
+        \item Créer une plateforme web moderne et automatisée.
+        \item Démontrer la modélisation d'une base de données relationnelle complexe.
+        \item Connecter cette base à une application web fonctionnelle (TP BDDA).
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Architecture Technique (La Stack)}
+    Architecture cloud moderne séparant le Frontend et le Backend :
+    
+    \begin{itemize}
+        \item \textbf{Frontend (Interface Utilisateur) :}
+        \begin{itemize}
+            \item React 18 et Vite.js
+            \item Material UI (Design "Glassmorphism")
+        \end{itemize}
+        \item \textbf{Backend (Logique Métier) :}
+        \begin{itemize}
+            \item Serveur Node.js / Express (API REST)
+        \end{itemize}
+        \item \textbf{Base de données et Hébergement :}
+        \begin{itemize}
+            \item \textbf{PostgreSQL} hébergé dans le Cloud (Neon Serverless)
+            \item Manipulée via l'ORM \textbf{Prisma}
+            \item Déploiement automatisé sur \textbf{Render}
+        \end{itemize}
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Modèle Conceptuel des Données (MCD)}
+    \textbf{Entités principales et associations :}
+    \begin{itemize}
+        \item \textbf{ETUDIANT} (1,N) $\longleftrightarrow$ \textit{S'inscrire} $\longleftrightarrow$ (1,N) \textbf{COURS}
+        \item \textbf{INSCRIPTION} (1,N) $\longleftrightarrow$ \textit{Avoir\_Note} $\longleftrightarrow$ (1,1) \textbf{NOTE}
+        \item \textbf{ETUDIANT} (0,N) $\longleftrightarrow$ \textit{Effectuer} $\longleftrightarrow$ (1,1) \textbf{PAIEMENT}
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    \textbf{Règles de gestion :}
+    \begin{itemize}
+        \item Un étudiant peut s'inscrire à plusieurs cours, et un cours accueille plusieurs étudiants.
+        \item Une inscription génère plusieurs notes (CC, Examen).
+        \item Un paiement est obligatoirement rattaché à un seul étudiant.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Modèle Logique des Données (MLD)}
+    Traduction relationnelle (Tables, Clés Primaires \underline{PK}, Clés Étrangères \textbf{\#FK}) :
+    
+    \begin{itemize}
+        \item \textbf{Etudiant}(\underline{id}, matricule, nom, prenom, email, filiere, \dots)
+        \item \textbf{Cours}(\underline{id}, code, titre, credits, semestre)
+        \item \textbf{Inscription}(\underline{id}, \textbf{\#etudiantId}, \textbf{\#coursId}, date, statut)
+        \item \textbf{Note}(\underline{id}, \textbf{\#inscriptionId}, type, note, coef, session)
+        \item \textbf{Paiement}(\underline{id}, \textbf{\#etudiantId}, montant, trxId, methode, date)
+    \end{itemize}
+    
+    \vspace{0.3cm}
+    \textbf{Contraintes d'intégrité (SGBD) :} 
+    \begin{itemize}
+        \item Contrainte d'unicité (\texttt{UNIQUE}) sur \texttt{matricule} et le couple \texttt{(etudiantId, coursId)}.
+        \item \texttt{ON DELETE CASCADE} pour garantir l'intégrité référentielle absolue.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}{Démonstration en Direct}
+    \begin{center}
+        \Large \textbf{Passons à la démonstration de l'application déployée !}
+        
+        \vspace{1cm}
+        \normalsize Lien officiel de l'application :\\
+        \url{https://sgsu-y5b2.onrender.com}
+        
+        \vspace{1cm}
+        \normalsize Identifiants de test :\\
+        Email : \texttt{admin@sgsu.edu}\\
+        Mot de passe : \texttt{admin@123}
+    \end{center}
+\end{frame}
+
+\begin{frame}{Bilan et Perspectives}
+    \textbf{Conclusion :}
+    \begin{itemize}
+        \item Plateforme cloud opérationnelle.
+        \item Preuve de la maîtrise de la chaîne complète : BD $\rightarrow$ Backend $\rightarrow$ Frontend $\rightarrow$ Hébergement.
+    \end{itemize}
+    
+    \vspace{0.5cm}
+    \textbf{Perspectives (V2.0) :}
+    \begin{itemize}
+        \item Migration du backend vers \textbf{Spring Boot (Java)}.
+        \item Intégration de \textbf{Keycloak} pour sécuriser l'authentification.
+        \item Génération automatique de Procès-Verbaux (PV) en PDF.
+    \end{itemize}
+\end{frame}
+
+\begin{frame}
+    \begin{center}
+        \Huge \textbf{Merci de votre attention !}
+    \end{center}
+\end{frame}
+
+\end{document}
