@@ -4,15 +4,16 @@
 
 ---
 
-## 🚀 Version en Production
+## 🚀 Version en Production (Accès Enseignant/Évaluateur)
 L'application est officiellement hébergée et accessible en ligne :
-* **Lien de l'application :** [https://sgsu.onrender.com](https://sgsu.onrender.com)
+* **Lien de l'application :** [https://sgsu-y5b2.onrender.com](https://sgsu-y5b2.onrender.com)
 * **Base de Données :** PostgreSQL (Serverless sur **Neon**)
 
-### 🔑 Identifiants d'administration par défaut (Se Connecter) :
+### 🔑 Identifiants pour tester l'application :
+Pour vous connecter et évaluer le système, utilisez le compte Administrateur par défaut :
 * **Adresse Email :** `admin@sgsu.edu`
 * **Mot de passe :** `admin@123`
-* *(Vous pouvez également créer de nouveaux comptes personnalisés via l'option "Créer un compte")*
+* *(Vous pouvez également créer de nouveaux comptes personnalisés via l'option "S'inscrire")*
 
 ---
 
